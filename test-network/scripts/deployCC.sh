@@ -258,7 +258,6 @@ installChaincode 2
 
 for CHANNEL_NAME in channel0shard0 channel1shard0 channel2shard0; do
     echo "========================================== Using '$CHANNEL_NAME' channel ======================================"
-    # VERSION=$CNT
 
     ## query whether the chaincode is installed
     queryInstalled 1
@@ -295,5 +294,14 @@ for CHANNEL_NAME in channel0shard0 channel1shard0 channel2shard0; do
     echo "Querying chaincode on peer0.org1..."
     chaincodeQuery 1
 done
+
+# Installed the "invoketrack" chaincode
+./customcc.sh
+
+# Set the first channel for invoke
+./updateCurrentChannel.sh "channel0shard0"
+
+# Load the value in file
+./queryCurrentChannel.sh
 
 exit 0

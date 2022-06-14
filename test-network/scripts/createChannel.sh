@@ -119,7 +119,7 @@ verifyResult() {
     fi
 }
 
-for CHANNEL_NAME in channel0shard0 channel1shard0 channel2shard0; do
+for CHANNEL_NAME in channelforcustomcc channel0shard0 channel1shard0 channel2shard0; do
     FABRIC_CFG_PATH=${PWD}/configtx
 
     ## Create channeltx

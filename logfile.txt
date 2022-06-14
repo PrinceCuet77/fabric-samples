@@ -1,0 +1,2 @@
+[34m2022-06-14 09:31:10.264 +06 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+[34m2022-06-14 09:31:10.266 +06 0002 INFO[0m [cli.common] [34;1mreadBlock[0m -> Received block: 0
