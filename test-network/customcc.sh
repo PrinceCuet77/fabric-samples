@@ -56,7 +56,7 @@ export PEER0_ORG2_CA=${PWD}/organizations/peerOrganizations/org2.example.com/pee
 export PEER0_ORG3_CA=${PWD}/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
 
 # Committed the chaincode
-parsePeerConnectionParameters 1 2
+# parsePeerConnectionParameters 1 2
 peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls true --cafile ${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem --channelID $CHANNEL_NAME --name invoketrack --peerAddresses localhost:7051 --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses localhost:9051 --tlsRootCertFiles $PEER0_ORG2_CA --version ${VERSION} --sequence ${VERSION}
 echo "===================== Query chaincode '$CC' definition successful on peer0.org1 on channel '$CHANNEL_NAME' ===================== "
 echo

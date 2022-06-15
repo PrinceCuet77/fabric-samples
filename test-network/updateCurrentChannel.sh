@@ -5,7 +5,7 @@ export PEER0_ORG1_CA=${PWD}/organizations/peerOrganizations/org1.example.com/pee
 export PEER0_ORG2_CA=${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
 
 ARG="$1"
-# echo $ARG
+echo $ARG
 
 peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls true --cafile $ORDERER_CA -C channelforcustomcc -n invoketrack --peerAddresses localhost:7051 --tlsRootCertFiles $PEER0_ORG1_CA --peerAddresses localhost:9051 --tlsRootCertFiles $PEER0_ORG2_CA -c '{"function":"UpdateCurrentChannelID","Args":["'$ARG'"]}'
 
