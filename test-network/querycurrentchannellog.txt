@@ -1,1 +1,1 @@
-channel2shard0
+channel0shard0

@@ -1,5 +1,10 @@
 CHANNEL_NAME="$1"
-CC_SRC_LANGUAGE="$2"
+# CC_SRC_LANGUAGE="$2"
+
+# Author: Prince
+CC_SRC_LANGUAGE="golang"
+CC_NAME="basic"
+
 VERSION="$3"
 DELAY="$4"
 MAX_RETRY="$5"
@@ -16,10 +21,17 @@ FABRIC_CFG_PATH=$PWD/../config/
 
 if [ "$CC_SRC_LANGUAGE" = "go" -o "$CC_SRC_LANGUAGE" = "golang" ]; then
     CC_RUNTIME_LANGUAGE=golang
-    CC_SRC_PATH="../chaincode/fabcar/go/"
+    # CC_SRC_PATH="../chaincode/fabcar/go/"
+
+    # Author: Prince
+    CC_SRC_PATH="../chaincode/asset-transfer-basic/chaincode-go/"
 
     echo Vendoring Go dependencies ...
-    pushd ../chaincode/fabcar/go
+    # pushd ../chaincode/fabcar/go
+
+    # Author: Prince
+    pushd ../chaincode/asset-transfer-basic/chaincode-go
+
     GO111MODULE=on go mod vendor
     popd
     echo Finished vendoring Go dependencies
@@ -62,7 +74,7 @@ packageChaincode() {
     ORG=$1
     setGlobals $ORG
     set -x
-    peer lifecycle chaincode package fabcar.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label fabcar_${VERSION} >&log.txt
+    peer lifecycle chaincode package ${CC_NAME}.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label ${CC_NAME}_${VERSION} >&log.txt
     res=$?
     set +x
     cat log.txt
@@ -76,7 +88,7 @@ installChaincode() {
     ORG=$1
     setGlobals $ORG
     set -x
-    peer lifecycle chaincode install fabcar.tar.gz >&log.txt
+    peer lifecycle chaincode install ${CC_NAME}.tar.gz >&log.txt
     res=$?
     set +x
     cat log.txt
@@ -94,7 +106,7 @@ queryInstalled() {
     res=$?
     set +x
     cat log.txt
-    PACKAGE_ID=$(sed -n "/fabcar_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
+    PACKAGE_ID=$(sed -n "/${CC_NAME}_${VERSION}/{s/^Package ID: //; s/, Label:.*$//; p;}" log.txt)
     verifyResult $res "Query installed on peer0.org${ORG} has failed"
     echo PackageID is ${PACKAGE_ID}
     echo "===================== Query installed successful on peer0.org${ORG} on channel '$CHANNEL_NAME' ===================== "
@@ -106,7 +118,8 @@ approveForMyOrg() {
     ORG=$1
     setGlobals $ORG
     set -x
-    peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name fabcar --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
+    # peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
+    peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" --version ${VERSION} --package-id ${PACKAGE_ID} --sequence ${VERSION} >&log.txt
     set +x
     cat log.txt
     verifyResult $res "Chaincode definition approved on peer0.org${ORG} on channel '$CHANNEL_NAME' failed"
@@ -128,7 +141,8 @@ checkCommitReadiness() {
         sleep $DELAY
         echo "Attempting to check the commit readiness of the chaincode definition on peer0.org${ORG} secs"
         set -x
-        peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name fabcar --version ${VERSION} --sequence ${VERSION} --output json --init-required >&log.txt
+        # peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" --version ${VERSION} --sequence ${VERSION} --output json --init-required >&log.txt
+        peer lifecycle chaincode checkcommitreadiness --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" --version ${VERSION} --sequence ${VERSION} --output json >&log.txt
         res=$?
         set +x
         let rc=0
@@ -157,7 +171,8 @@ commitChaincodeDefinition() {
     # peer (if join was successful), let's supply it directly as we know
     # it using the "-o" option
     set -x
-    peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name fabcar $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+    # peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+    peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name ${CC_NAME} --signature-policy "OR ('Org1MSP.peer')" $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} >&log.txt
     res=$?
     set +x
     cat log.txt
@@ -180,7 +195,7 @@ queryCommitted() {
         sleep $DELAY
         echo "Attempting to Query committed status on peer0.org${ORG}, Retry after $DELAY seconds."
         set -x
-        peer lifecycle chaincode querycommitted --channelID $CHANNEL_NAME --name fabcar >&log.txt
+        peer lifecycle chaincode querycommitted --channelID $CHANNEL_NAME --name ${CC_NAME} >&log.txt
         res=$?
         set +x
         test $res -eq 0 && VALUE=$(cat log.txt | grep -o '^Version: [0-9], Sequence: [0-9], Endorsement Plugin: escc, Validation Plugin: vscc')
@@ -208,7 +223,8 @@ chaincodeInvokeInit() {
     # peer (if join was successful), let's supply it directly as we know
     # it using the "-o" option
     set -x
-    peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"initLedger","Args":[]}' >&log.txt
+    # peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS --isInit -c '{"function":"initLedger","Args":[]}' >&log.txt
+    peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n ${CC_NAME} $PEER_CONN_PARMS -c '{"function":"initLedger","Args":[]}' >&log.txt
     res=$?
     set +x
     cat log.txt
@@ -229,7 +245,11 @@ chaincodeQuery() {
         sleep $DELAY
         echo "Attempting to Query peer0.org${ORG} ...$(($(date +%s) - starttime)) secs"
         set -x
-        peer chaincode query -C $CHANNEL_NAME -n fabcar -c '{"Args":["queryAllCars"]}' >&log.txt
+        # peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"Args":["queryAllCars"]}' >&log.txt
+
+        # Author: Prince
+        peer chaincode query -C $CHANNEL_NAME -n ${CC_NAME} -c '{"Args":["GetAllAssets"]}' >&log.txt
+
         res=$?
         set +x
         let rc=$res
@@ -255,6 +275,8 @@ echo "Installing chaincode on peer0.org1..."
 installChaincode 1
 echo "Install chaincode on peer0.org2..."
 installChaincode 2
+
+
 
 for CHANNEL_NAME in channel0shard0 channel1shard0 channel2shard0; do
     echo "========================================== Using '$CHANNEL_NAME' channel ======================================"
@@ -294,6 +316,35 @@ for CHANNEL_NAME in channel0shard0 channel1shard0 channel2shard0; do
     echo "Querying chaincode on peer0.org1..."
     chaincodeQuery 1
 done
+
+CHANNEL_NAME="customchannel"
+echo "========================================== Using '$CHANNEL_NAME' channel ======================================"
+
+## query whether the chaincode is installed
+queryInstalled 1
+
+## approve the definition for org1
+approveForMyOrg 1
+
+## check whether the chaincode definition is ready to be committed
+## expect org1 to have approved and org2 not to
+checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
+checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
+
+## now approve also for org2
+approveForMyOrg 2
+
+## check whether the chaincode definition is ready to be committed
+## expect them both to have approved
+checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
+checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
+
+## now that we know for sure both orgs have approved, commit the definition
+commitChaincodeDefinition 1 2
+
+## query on both orgs to see that the definition committed successfully
+queryCommitted 1
+queryCommitted 2
 
 # Installed the "invoketrack" chaincode
 ./customcc.sh

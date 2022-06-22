@@ -119,7 +119,7 @@ verifyResult() {
     fi
 }
 
-for CHANNEL_NAME in channelforcustomcc channel0shard0 channel1shard0 channel2shard0; do
+for CHANNEL_NAME in channelforcustomcc channel0shard0 channel1shard0 channel2shard0 customchannel; do
     FABRIC_CFG_PATH=${PWD}/configtx
 
     ## Create channeltx
@@ -127,8 +127,8 @@ for CHANNEL_NAME in channelforcustomcc channel0shard0 channel1shard0 channel2sha
     createChannelTx $CHANNEL_NAME
 
     ## Create anchorpeertx
-    # echo "### Generating channel configuration transaction '${CHANNEL_NAME}.tx' ###"
-    # createAncorPeerTx
+    echo "### Generating channel configuration transaction '${CHANNEL_NAME}.tx' ###"
+    createAncorPeerTx
 
     FABRIC_CFG_PATH=$PWD/../config/
 
