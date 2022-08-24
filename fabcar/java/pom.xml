@@ -25,11 +25,17 @@
       </repository>
    </repositories>
    <dependencies>
-      <dependency>
-         <groupId>org.hyperledger.fabric</groupId>
-         <artifactId>fabric-gateway-java</artifactId>
-         <version>1.4.1-SNAPSHOT</version>
-      </dependency>
+      <!-- https://mvnrepository.com/artifact/org.hyperledger.fabric/fabric-gateway-java -->
+<!-- https://mvnrepository.com/artifact/org.hyperledger.fabric/fabric-gateway-java -->
+<!-- https://mvnrepository.com/artifact/org.hyperledger.fabric/fabric-gateway-java -->
+<dependency>
+    <groupId>org.hyperledger.fabric</groupId>
+    <artifactId>fabric-gateway-java</artifactId>
+    <version>1.4.1</version>
+</dependency>
+
+
+
       <dependency>
          <groupId>org.junit.platform</groupId>
          <artifactId>junit-platform-launcher</artifactId>

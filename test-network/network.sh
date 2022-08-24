@@ -400,8 +400,8 @@ function networkDown() {
         rm -rf addOrg3/fabric-ca/org3/msp addOrg3/fabric-ca/org3/tls-cert.pem addOrg3/fabric-ca/org3/ca-cert.pem addOrg3/fabric-ca/org3/IssuerPublicKey addOrg3/fabric-ca/org3/IssuerRevocationPublicKey addOrg3/fabric-ca/org3/fabric-ca-server.db
 
         # remove channel and script artifacts
-        # rm -rf channel-artifacts log.txt fabcar.tar.gz fabcar invoketrack.tar.gz invoketrack basic.tar.gz basic vcc.block *.block *.tx res.txt querycurrentchannellog.txt querycclog.txt
-        rm -rf channel-artifacts log.txt fabcar.tar.gz fabcar
+        rm -rf channel-artifacts log.txt fabcar.tar.gz fabcar invoketrack.tar.gz invoketrack basic.tar.gz basic vcc.block *.block *.tx res.txt querycurrentchannellog.txt querycclog.txt
+        # rm -rf channel-artifacts log.txt fabcar.tar.gz fabcar
 
     fi
 }

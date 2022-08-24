@@ -46,6 +46,8 @@ services:
             - 7050:7050
         networks:
             - test
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
 
     peer0.org1.example.com:
         container_name: peer0.org1.example.com
@@ -80,12 +82,16 @@ services:
             - ../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
             - ../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
             - peer0.org1.example.com:/var/hyperledger/production
+            # - /home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples/test-network:/opt/gopath/src/github.com/hyperledger/fabric/peer/test-network
+            # - /home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples:/opt/gopath/src/github.com/hyperledger/fabric/peer
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: peer node start
         ports:
             - 7051:7051
         networks:
             - test
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
 
     peer0.org2.example.com:
         container_name: peer0.org2.example.com
@@ -120,9 +126,13 @@ services:
             - ../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
             - ../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
             - peer0.org2.example.com:/var/hyperledger/production
+            # - /home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples/test-network:/opt/gopath/src/github.com/hyperledger/fabric/peer/test-network
+            # - /home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples:/opt/gopath/src/github.com/hyperledger/fabric/peer
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: peer node start
         ports:
             - 9051:9051
         networks:
             - test
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'

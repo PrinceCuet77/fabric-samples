@@ -23,8 +23,10 @@ public class ClientApp {
 		Path walletPath = Paths.get("wallet");
 		Wallet wallet = Wallet.createFileSystemWallet(walletPath);
 		// load a CCP
-		Path networkConfigPath = Paths.get("..", "..", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.yaml");
-
+//		Path networkConfigPath = Paths.get("..", "..", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.yaml");
+		Path networkConfigPath = Paths.get("/home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples/", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.yaml");
+		
+		
 		Gateway.Builder builder = Gateway.createBuilder();
 		builder.identity(wallet, "appUser").networkConfig(networkConfigPath).discovery(true);
 
@@ -32,22 +34,38 @@ public class ClientApp {
 		try (Gateway gateway = builder.connect()) {
 
 			// get the network and contract
-			Network network = gateway.getNetwork("mychannel");
-			Contract contract = network.getContract("fabcar");
+//			Network network = gateway.getNetwork("mychannel");
+//			Contract contract = network.getContract("fabcar");
+			
+			Network network = gateway.getNetwork("customchannel");
+			Contract contract = network.getContract("basic");
 
 			byte[] result;
 
-			result = contract.evaluateTransaction("queryAllCars");
+//			result = contract.evaluateTransaction("queryAllCars");
+			result = contract.evaluateTransaction("GetAllAssets");
 			System.out.println(new String(result));
 
-			contract.submitTransaction("createCar", "CAR10", "VW", "Polo", "Grey", "Mary");
+//			contract.submitTransaction("createCar", "CAR10", "VW", "Polo", "Grey", "Mary");
+			
+			String funcName = "CreateAsset",
+					ID = "asset1",
+					Color = "blue",
+					Size = "5",
+					Owner = "Tomoko",
+					AppraisedValue = "300";
+			contract.submitTransaction(funcName, ID, Color, Size, Owner, AppraisedValue);
 
-			result = contract.evaluateTransaction("queryCar", "CAR10");
+//			result = contract.evaluateTransaction("queryCar", "CAR10");
+			
+			result = contract.evaluateTransaction("ReadAsset", ID);
 			System.out.println(new String(result));
 
-			contract.submitTransaction("changeCarOwner", "CAR10", "Archie");
+//			contract.submitTransaction("changeCarOwner", "CAR10", "Archie");
+			contract.submitTransaction("changeCarOwner", ID, "Prince");
 
-			result = contract.evaluateTransaction("queryCar", "CAR10");
+//			result = contract.evaluateTransaction("queryCar", "CAR10");
+			result = contract.evaluateTransaction("ReadAsset", ID);
 			System.out.println(new String(result));
 		}
 	}

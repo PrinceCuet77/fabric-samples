@@ -29,11 +29,11 @@ public class RegisterUser {
 		// Create a CA client for interacting with the CA.
 		Properties props = new Properties();
 		props.put("pemFile",
-			"../../test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem");
+			"/home/prince-11209/Desktop/Fabric/RnD-Task/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem");
 		props.put("allowAllHostNames", "true");
-		HFCAClient caClient = HFCAClient.createNewInstance("https://localhost:7054", props);
+//		HFCAClient caClient = HFCAClient.createNewInstance("https://localhost:7054", props);
 		CryptoSuite cryptoSuite = CryptoSuiteFactory.getDefault().getCryptoSuite();
-		caClient.setCryptoSuite(cryptoSuite);
+//		caClient.setCryptoSuite(cryptoSuite);
 
 		// Create a wallet for managing identities
 		Wallet wallet = Wallet.createFileSystemWallet(Paths.get("wallet"));
@@ -98,14 +98,14 @@ public class RegisterUser {
 		};
 
 		// Register the user, enroll the user, and import the new identity into the wallet.
-		RegistrationRequest registrationRequest = new RegistrationRequest("appUser");
-		registrationRequest.setAffiliation("org1.department1");
-		registrationRequest.setEnrollmentID("appUser");
-		String enrollmentSecret = caClient.register(registrationRequest, admin);
-		Enrollment enrollment = caClient.enroll("appUser", enrollmentSecret);
-		Identity user = Identity.createIdentity("Org1MSP", enrollment.getCert(), enrollment.getKey());
-		wallet.put("appUser", user);
-		System.out.println("Successfully enrolled user \"appUser\" and imported it into the wallet");
+//		RegistrationRequest registrationRequest = new RegistrationRequest("appUser");
+//		registrationRequest.setAffiliation("org1.department1");
+//		registrationRequest.setEnrollmentID("appUser");
+//		String enrollmentSecret = caClient.register(registrationRequest, admin);
+//		Enrollment enrollment = caClient.enroll("appUser", enrollmentSecret);
+//		Identity user = Identity.createIdentity("Org1MSP", enrollment.getCert(), enrollment.getKey());
+//		wallet.put("appUser", user);
+//		System.out.println("Successfully enrolled user \"appUser\" and imported it into the wallet");
 	}
 
 }

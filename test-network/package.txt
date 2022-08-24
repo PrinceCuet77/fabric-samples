@@ -1,0 +1,3 @@
+Installed chaincodes on peer:
+Package ID: invoketrack_1:83485a832a0cce3949acf0f78e130204b4f07ab86000766b2edd345ed8b8e12c, Label: invoketrack_1
+Package ID: basic_1:9d1d40ad3888d5babeb57e0c71c8e77102ac06cf1a6a0b02e52b07213b3f4203, Label: basic_1

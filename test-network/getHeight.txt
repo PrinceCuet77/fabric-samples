@@ -1,0 +1,2 @@
+[34m2022-07-27 18:45:26.298 +06 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
+Blockchain info: {"height":5,"currentBlockHash":"ujWXDbJVs1ppgcJNdlM7JazuGYfzqgAWgU5zKHPBv60=","previousBlockHash":"8+yncglJbTKcaZ/pSCdWP4/5/9LBTge1BXRkCDuLZG8="}
