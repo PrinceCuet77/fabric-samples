@@ -5,13 +5,9 @@ SPDX-License-Identifier: Apache-2.0
 package org.example;
 
 import java.nio.file.Paths;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
 import java.util.Properties;
 
 import org.hyperledger.fabric.gateway.Wallet;
-import org.hyperledger.fabric.gateway.Wallets;
-import org.hyperledger.fabric.protos.msp.Identities;
 import org.hyperledger.fabric.gateway.Wallet.Identity;
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
@@ -37,20 +33,20 @@ public class EnrollAdmin {
 		caClient.setCryptoSuite(cryptoSuite);
 
 		// Create a wallet for managing identities
-//		Wallet wallet = Wallet.createFileSystemWallet(Paths.get("wallet"));
+		Wallet wallet = Wallet.createFileSystemWallet(Paths.get("wallet"));
 		
 		// ---------------------------------------------------
-		 Wallet wallet = Wallets.newFileSystemWallet(Paths.get("wallet");
+//		 Wallet wallet = Wallets.newFileSystemWallet(Paths.get("wallet");
 	        if (wallet.get("admin") != null) {
 	            System.out.println("An identity for the admin user \"admin\" already exists in the wallet");
-	            return wallet;
+//	            return wallet;
 	        }
-	        X509Certificate certificate = Identities.readX509Certificate(
-	                new java.io.InputStreamReader(new FileInputStream(new File(Config.BC_ADMIN_CERT_PATH))));
-	        PrivateKey key = Identities.readPrivateKey(
-	                new java.io.InputStreamReader(new FileInputStream(new File(Config.BC_ADMIN_PRRIATE_KEY_PATH))));
-	        wallet.put("admin", Identities.newX509Identity(Config.MSP, certificate, key));
-	        return wallet;
+//	        X509Certificate certificate = Identities.readX509Certificate(
+//	                new java.io.InputStreamReader(new FileInputStream(new File(Config.BC_ADMIN_CERT_PATH))));
+//	        PrivateKey key = Identities.readPrivateKey(
+//	                new java.io.InputStreamReader(new FileInputStream(new File(Config.BC_ADMIN_PRRIATE_KEY_PATH))));
+//	        wallet.put("admin", Identities.newX509Identity(Config.MSP, certificate, key));
+//	        return wallet;
 	        // -------------------------------------------------
 
 		// Check to see if we've already enrolled the admin user.
